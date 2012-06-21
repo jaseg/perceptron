@@ -1,6 +1,8 @@
 #!/usr/bin/env ruby
 
 class Perceptron
+    attr_accessor :w
+
     def initialize(dim, eta)
         @w = Array.new(dim, 1.0/(dim)) #dim+1 ?
         @eta = eta
@@ -44,8 +46,9 @@ if patterns[0].size != 256
     exit
 end
 puts "#Loaded #{patterns.size} patterns."
+ps = Array.new()
 accuracies = Array.new
-conf = Array.new(10)
+#conf = Array.new(10)
 
 
 
@@ -62,22 +65,18 @@ fold = 10
         data.rotate!
         train = data[1..fold].flatten(1)
         test = data[0]
-        #puts "train.size: #{train.size}"
-        #puts "train[0].size: #{train[0].size}"
-        #puts "train[0][0]: #{train[0][0]}"
-        #puts "train[0][1]: #{train[0][1]}"
-        #train = data.each_with_index.reject{|e, i| i != pos}.map{|e| e[0]}.flatten(1)
         its.times do |it|
             e = train.sample
             p.train(e[0], e[1], it)
         end
-        #test = data.each_with_index.reject{|e, i| i == pos}.map{|e| e[0]}.flatten(1)
         test.each do |e|
             if p.test(e[0]) == e[1].angle
                 accuracy += 1
             end
         end
+        puts "Perceptron weight vector length: #{Math.sqrt(p.w.reduce(0){|m,e|m+e*e})}"
     end
     accuracies << accuracy / patterns.size
     puts "#{num}\t#{accuracies.last}"
+    #thisconf.map!{|e|1/patterns.size}
 end
