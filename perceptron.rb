@@ -67,7 +67,7 @@ fold = 10
         test = data[0]
         its.times do |it|
             e = train.sample
-            p.train(e[0], e[1], it)
+            p.train(e[0], e[1], it+1)
         end
         test.each do |e|
             if p.test(e[0]) == e[1].angle
